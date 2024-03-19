@@ -1,11 +1,13 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/books">Books</router-link>
-  </nav>
-  <v-divider />
-  <router-view/>
+  <v-app theme="dark">
+    <nav>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+      <router-link to="/books">Books</router-link>
+    </nav>
+    <v-divider />
+    <router-view/>
+  </v-app>
 </template>
 
 <style>
@@ -31,6 +33,10 @@ nav a.router-link-exact-active {
 }
 
 * {
-  font-family: Verdana, Geneva, Tahoma, sans-serif
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.disable-events {
+  pointer-events: none
 }
 </style>

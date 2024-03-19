@@ -1,23 +1,26 @@
 <template>
     <div class="home">
-        <BooksTable :book-data="bookData" />
+        <BooksTable :book-data="bookData">
+            <AddBook class="modal" :labels="headers"></AddBook>
+        </BooksTable>
     </div>
 </template>
-  
+
 <script>
-    // @ is an alias to /src
+    import AddBook from '@/components/AddBook.vue'
     import BooksTable from '@/components/BooksTable.vue'
     import bookApi from '@/api'
 
     export default {
         name: 'BooksView',
         components: {
-            BooksTable
+            AddBook,
+            BooksTable,
         },
 
         data() {
             return {
-                bookData: []
+                bookData: [],
             }
         },
 
@@ -25,7 +28,6 @@
             getData() {
                 bookApi.get('/books')
                 .then((response) => {
-                    console.log(response);
                     this.bookData = response.data;
                 })
                 .catch((error) => {
@@ -39,13 +41,16 @@
                         // The request was made but no response was received
                         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                         // http.ClientRequest in node.js
-                        console.log('nothing');
                         console.log(error.request);
                     } else {
                         // Something happened in setting up the request that triggered an Error
                         console.log('Error', error.message);
                     }
                 });
+            },
+
+            reload() {
+                this.getData()
             }
         },
 

@@ -1,36 +1,42 @@
 <template>
-    <v-table>
-        <thead>
-            <tr>
-                <th class="text-center table-header" v-for="header in headers" :key="header">
-                    <b>{{ header }}</b>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="item in bookData" :key="item.id">
-                <td class="cover"><img :src="item.artworkUrl" /></td>
-                <td>{{ item.title }}</td>
-                <td>{{ item.author }}</td>
-                <td>{{ item.format }}</td>
-                <td>{{ item.start }}</td>
-                <td>{{ item.end }}</td>
-            </tr>
-        </tbody>
-    </v-table>
+    <v-card flat>
+        <v-card-title class="align-center">
+            Books
+            <slot></slot>
+        </v-card-title>
+        <v-data-table :items="bookData" :headers="this.headers" :loading="loading">
+
+            <template v-slot:item="{ item }">
+                <tr>
+                    <td class="cover"><img :src="item.artworkUrl ?? 'https://www.harborfreight.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/i/m/image_25592.jpg'" title="Cover" @click="this.goToImage(item.artworkUrl)" /></td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.author }}</td>
+                    <td>{{ item.format }}</td>
+                    <td>{{ item.wordCount.toLocaleString() }}</td>
+                    <td>{{ item.startDate }}</td>
+                    <td>{{ item.endDate }}</td>
+                </tr>
+            </template>
+            <template v-slot:loading>
+                <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+            </template>
+        </v-data-table>
+    </v-card>
 </template>
 
 <script>
+
 export default {
     data() {
         return {
             headers: [
-                '',
-                'Name',
-                'Author',
-                'Format',
-                'Start Time',
-                'End Time',
+                { title: '', value: 'artworkUrl' },
+                { title: 'Title', value: 'title', align: 'center', sortable: true },
+                { title: 'Author', value: 'author', align: 'center' },
+                { title: 'Format', value: 'format', align: 'center' },
+                { title: 'Word Count', value: 'wordCount', align: 'center', sortable: true },
+                { title: 'Start Date', value: 'startDate', align: 'center', sortable: true },
+                { title: 'End Date', value: 'endDate', align: 'center', sortable: true }
             ]
         }
     },
@@ -43,18 +49,26 @@ export default {
         stringToDate(date) {
             const response = new Date(date);
             return response;
-        }
+        },
+
+        goToImage(url) {
+            window.open(url, "_black");
+        },
     },
+
+    computed: {
+        loading() {
+            return !this.bookData;
+        }
+    }
 }
 </script>
 
 <style>
 .v-table {
-    background-color: rgb(174, 214, 174);
     box-sizing: content-box;
     width: 100%;
-    border: solid rgb(255, 0, 0) 1px;
-    margin: 5px;
+    /* margin: 5px; */
 }
 
 .table-header {
@@ -63,7 +77,7 @@ export default {
 }
 
 td:not(:last-child) {
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgb(var(--v-theme-surface-light));
 }
 
 img {
