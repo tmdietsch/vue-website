@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import BooksView from '../views/BooksView.vue'
+import NasaPOD from '@/components/NasaPOD.vue'
 
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     path: '/books',
     name: 'books',
     component: BooksView,
+  },
+  {
+    path: '/nasapod',
+    name: 'pod',
+    component: NasaPOD,
   }
 ]
 
